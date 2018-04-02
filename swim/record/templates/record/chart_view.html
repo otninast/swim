@@ -1,59 +1,44 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Chart View</title>
+  <meta charset="UTF-8">
+  <title>Chart View</title>
 
 </head>
+
 <body>
-  <p>
-    コマンド
-  </p>
-
-
+  <p>コマンド</p>
   <form id='school_name' action="127.0.0.1:8000/ajax_chart/" method="get">
-    <p>
-      学校名：
+    <p>学校名：
       <select id="school_name_selector" name="school_name">
         {% for school_name in school_names %}
         <option>
         {{ school_name }}
         </option>
         {% endfor %}
-
       </select>
-
   </form>
-
-</p>
-
-<div id="result">}</div>
+  </p>
+  <div id="result"></div>
 
 
 
-<script
-  src="https://code.jquery.com/jquery-2.2.4.js"
-  integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
-  crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
 
   <script>
-    $(function(){
-      $("select").change(function(){
-      //var school_name = $("option:selected").val();
+    $(function() {
+      $("select").change(function() {
         $.ajax({
-        //url:"{% url 'ajax_chart' %}"
           url: "http://127.0.0.1:8000/record/ajax_chart/",
-          type:"GET",
-          //datatype: "json",
-          data:{
-            'school_name':$('#school_name_selector').val(),
+          type: "GET",
+          data: {
+            'school_name': $('#school_name_selector').val(),
           },
-          dataType:'json',
-          //name: $("#school_name").val(),
-          success: function(responce){
+          dataType: 'json',
+          success: function(responce) {
             //debugger;
             alert('OK!');
-            //$("#result").html(resp);
           },
           failure: function(responce) {
             alert('Got an error dude');
@@ -64,4 +49,5 @@
     });
   </script>
 </body>
+
 </html>

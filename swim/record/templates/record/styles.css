@@ -1,0 +1,140 @@
+@charset "UTF-8";
+body {
+  font-size: 14px;
+  font-family: Verdana, sans-serif;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+}
+
+p {
+  line-height: 2;
+}
+
+.btn {
+  display: inline-block;
+  width: 290px;
+  line-height: 45px;
+  background: #fff;
+  text-align: center;
+  color: #FCE8AC;
+  border-radius: 5px;
+  opacity: 0.8;
+}
+
+.btn:hover {
+  opacity: 1;
+}
+
+section {
+  padding: 90px 0;
+}
+
+section:nth-child(odd) {
+  background: #f8f8f8;
+}
+
+section .container {
+  width: 820px;
+  margin: 0 auto;
+}
+
+section h2 {
+  font-size: 26px;
+  text-align: center;
+  margin: 0 0 auto;
+  font-weight: normal;
+}
+
+section:not(.call-to-action)
+h2:after {
+  /* content: '- title -'; */
+  display: block;
+  font-size: 18px;
+  color: #aaa;
+  padding-top: 10px;
+}
+
+img.shadow {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+
+/* header */
+
+header {
+  background: url('img/header.jpg');
+  background-size: cover;
+}
+
+header .container {
+  width: 820px;
+  margin: 0 auto;
+  height: 340px;
+  padding-top: 10px;
+}
+
+header h1, header p {
+  color: #fff;
+}
+
+header p {
+  padding-top: 50px;
+}
+
+header h1 {
+  font-size: 34px;
+  margin-bottom: 50px;
+}
+
+
+/* featurs */
+
+.featurs h2:after {
+  content: '- Swim! -';
+}
+
+.desc {
+  width: 360px;
+}
+.pull-right {
+  float: right;
+  padding-left: 40px;
+}
+
+.pull-left {
+  float: left;
+  padding-right: 40px;
+}
+
+.row {
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+section h2 {
+  margin-bottom: 20px;
+}
+
+.featurs h3 {
+  font-size: 24px;
+}
+
+/* voices */
+
+.voices h2:after {
+  content: '- Record! -';
+}
+
+
+/* footer */
+
+footer {
+  padding: 90px 0;
+  text-align: center;
+  /* color: #ccc; */
+  background: #FCE8AC;
+  color: #fff;
+}
