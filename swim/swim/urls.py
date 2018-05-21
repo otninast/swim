@@ -25,6 +25,9 @@ from django.conf.urls import include, url
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    
+
     url(r'^record/', include('record.urls')),
+    url(r'^opinion_box/', include('opinion_box.urls')),
 
 ]

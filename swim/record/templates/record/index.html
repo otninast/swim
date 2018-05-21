@@ -1,11 +1,14 @@
+{% load static %}
+
+
 <!DOCTYPE html>
 <html lang='ja'>
 
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="normalize.css">
-  <link rel="icon" href="favicon.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="{% static 'normalize.css' %}">
+  <link rel="icon" href="{% static 'img/favicon.png' %}">
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
   <title>Swim Rcord Analytics</title>
 </head>
 
@@ -15,15 +18,16 @@
       <p>
         スイムレコードからパクったデータを、<br> なんか良い感じのグラフで描写。</p>
       <h1>Swim Record Analytics</h1>
-      <a class="btn" href="#">やってみる</a>
+      <a class="btn" href="http://127.0.0.1:8000/record/opinion_box/">やってみる</a>
     </div>
   </header>
+
 
   <section class="featurs">
     <h2>Swim Swim Swim</h2>
     <div class="container">
       <div class="row">
-        <img src="img/kikuta1.png" width="300" height="400" alt="kikuta!" class="shadow">
+        <img src="{% static 'img/kikuta1.png' %}" width="300" height="400" alt="kikuta!" class="shadow" href="record/input_data">
         <div class="desc pull-right">
           <h3>すごい、菊田！</h3>
           <p>すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！</p>
@@ -36,7 +40,7 @@
     <h2>Reord Record Record</h2>
     <div class="container">
       <div class="row">
-        <img src="img/sanai1.jpg" width="300" height="400" alt="sanai!" class="shadow">
+        <img src="{% static 'img/sanai1.jpg' %}" width="300" height="400" alt="sanai!" class="shadow">
         <div class="desc pull-left">
           <h3>すごい、さない！</h3>
           <p>すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！</p>
@@ -49,7 +53,7 @@
     <h2>Aoyama Aoyama Aoyama</h2>
     <div class="container">
       <div class="row">
-        <img src="img/banana.png"
+        <img src="{% static 'img/banana.png' %}"
         width="400" height="300"
         alt="banana!" >
         <div class="desc pull-right">
