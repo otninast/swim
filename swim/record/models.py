@@ -1,4 +1,12 @@
 from django.db import models
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
+
+# from django.contrib.auth.base_user import BaseUserManager
+# from django.contrib.auth.models import PermissionsMixin
+# from django.contrib.auth.base_user import AbstractBaseUser
+
+from django.utils.translation import ugettext_lazy as _
 
 SEX_CHOICES = (
     ('M', 'Man'),
@@ -32,6 +40,15 @@ DISTANCE_CHOICES = (
 #     ('', ''),
 #     ('', ''),
 # )
+
+class Users(User):
+    pass
+
+
+
+
+
+
 
 class Person(models.Model):
     family_name = models.CharField(max_length=15, verbose_name='姓')

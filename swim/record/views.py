@@ -1,8 +1,13 @@
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.template.response import TemplateResponse
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, Http404, HttpResponseRedirect
+from django.views import View
 from django.views.generic import ListView, TemplateView
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+
 from .models import Person, Menue, Time_Result
 from .forms import Menue_Form, Time_Result_Form
 
@@ -26,16 +31,33 @@ Df = pd.read_csv('~/swimrecord/swim/record/Result_all.csv')
 Team16 = set(Df[Df.Competition == '16高'].Team)
 Df16 = Df[Df.Team.isin(Team16)]
 
+def new(request):
+    form = UserCreationForm()
+    return TemplateResponse(request, 'record/new.html', {'form': form,})
+def create(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('login.html')
+        else:
+            return TemplateResponse(request, 'record/new.html', {'form': form,})
+    else:
+        return Http404
+
+@login_required
 def Index(request):
     return TemplateResponse(request, 'record/index.html')
 
-
+@login_required
 def OpinionBox(request):
     try:
         os.remove('/Users/tomoya/Desktop/opinion_box_test.csv')
     except:
         print('ありません')
     return TemplateResponse(request, 'record/opinion_box.html')
+
+@login_required
 def OpinionBoxAjax(request):
     try:
         df = pd.read_csv('~/Desktop/opinion_box_test.csv')
@@ -70,31 +92,33 @@ def OpinionBoxAjax(request):
     response["Access-Control-Allow-Headers"] = "*"
 
     return response
+
+@login_required
 def OpinionBoxResult(request):
-    df = pd.read_csv('~/Desktop/opinion_box_test.csv')
+        df = pd.read_csv('~/Desktop/opinion_box_test.csv')
 
 
-    fig, ax = plt.subplots()
-    ax = df.Leng.plot()
-    canvas = FigureCanvasAgg(fig)
+        fig, ax = plt.subplots()
+        ax = df.Leng.plot()
+        canvas = FigureCanvasAgg(fig)
 
-    png_output = BytesIO()
-    canvas.print_png(png_output)
-    bs64 = b64encode(png_output.getvalue())
-    image = str(bs64)
-    image = image[2:-1]
+        png_output = BytesIO()
+        canvas.print_png(png_output)
+        bs64 = b64encode(png_output.getvalue())
+        image = str(bs64)
+        image = image[2:-1]
 
-    dict = json.dumps({'image': image})
+        dict = json.dumps({'image': image})
 
-    response = HttpResponse(dict, content_type='application/json')
-    response["Access-Control-Allow-Origin"] = "*"
-    response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
-    response["Access-Control-Max-Age"] = "1000"
-    response["Access-Control-Allow-Headers"] = "*"
+        response = HttpResponse(dict, content_type='application/json')
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+        response["Access-Control-Max-Age"] = "1000"
+        response["Access-Control-Allow-Headers"] = "*"
 
-    return response
+        return response
 
-
+@login_required
 def Input_Data(request):
     menue_form = Menue_Form()
     time_result_form = Time_Result_Form()
@@ -134,7 +158,7 @@ def ajax_chart(request):
 
 
 
-
+"""
 def boxplot(request):
     from bokeh.charts import BoxPlot, show
     from bokeh.resources import CDN
@@ -176,3 +200,4 @@ def simple_chart(request):
         "the_script": script,
         "the_div": div,
     })
+"""
