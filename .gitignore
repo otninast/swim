@@ -1,0 +1,6 @@
+*.dblite3
+*.pyc
+*.swp
+/opinion_box/*
+*.ipynb
+*.ipynb_checkpoints

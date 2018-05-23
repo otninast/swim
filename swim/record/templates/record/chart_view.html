@@ -1,0 +1,47 @@
+{% extends "base.html" %} {% block body %}
+
+<p>コマンド</p>
+<form id='school_name' action="127.0.0.1:8000/ajax_chart/" method="get">
+  <p>学校名：
+    <select id="school_name_selector" name="school_name">
+        {% for school_name in school_names %}
+        <option>
+        {{ school_name }}
+        </option>
+        {% endfor %}
+      </select>
+</form>
+</p>
+<div id="result">
+  <!-- <img src="http://127.0.0.1:8000/record/ajax_chart/" alt=""> -->
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+
+<script>
+  $(function() {
+    $("select").change(function() {
+      $.ajax({
+        url: "http://127.0.0.1:8000/record/ajax_chart/",
+        type: "GET",
+        data: {
+          'school_name': $('#school_name_selector').val(),
+        },
+        dataType: 'json',
+        success: function(response) {
+          $('#result').append($('<img>', {
+            src: 'data:image/png;base64,' + response.image
+          }));
+        },
+        failure: function(responce) {
+          alert('Got an error dude');
+        },
+      });
+    });
+    return false;
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+@charset "UTF-8";
+
+body {
+  background: #ccc;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  /* display: inline-block; */
+}
+
+
+.container {
+  width: 500px;
+  margin: 25px auto;
+}
+
+#name,
+#sex,
+#msg {
+  font-size: 14px;
+  box-sizing: border-box;
+  padding: 10px;
+  height: 40px;
+  border-radius: 5px;
+  border: none;
+  margin-bottom: 40px;
+}
+
+#theme {
+  margin: 25px auto;
+
+}
+
+
+
+
+
+/* .checkbox {
+  margin-bottom: 40px;
+} */
+
+#msg {
+  height: 150px;
+  width: 600px;
+}
+
+#btn {
+  cursor: pointer;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 110px;
+  padding: 10px;
+  margin-bottom: auto;
+  background: #3897fd;
+  border-radius: 5px;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 10px;
+
+}
+
+.msg2 {
+  background: #f8f8f8;
+  padding: 10px;
+  height: 130px;
+  border-radius: 5px;
+}
