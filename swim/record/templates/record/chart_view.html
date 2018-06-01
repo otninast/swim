@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block body %}
 
-<p>コマンド</p>
+
 <form id='school_name' action="127.0.0.1:8000/ajax_chart/" method="get">
   <p>学校名：
     <select id="school_name_selector" name="school_name">
@@ -9,12 +9,21 @@
         {{ school_name }}
         </option>
         {% endfor %}
-      </select>
+    </select>
+  </p>
 </form>
-</p>
+
+<table>{{select_form.as_table}}</table>
+
 <div id="result">
-  <!-- <img src="http://127.0.0.1:8000/record/ajax_chart/" alt=""> -->
+  <img class="img" src="">
+
+  <div id="table">
+  </div>
+
 </div>
+
+
 
 
 
@@ -31,9 +40,10 @@
         },
         dataType: 'json',
         success: function(response) {
-          $('#result').append($('<img>', {
-            src: 'data:image/png;base64,' + response.image
-          }));
+          var image_src = 'data:image/png;base64,' + response.image;
+          $('.img').attr('src', image_src);
+          // $('.img').fadeIn(800);
+          $('#table').html(response.table);
         },
         failure: function(responce) {
           alert('Got an error dude');

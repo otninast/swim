@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 
-<form method="post" action="{% url 'create' %}">
+<!-- <form method="post" action="{% url 'create' %}">
     {% csrf_token %}
     {{ form.non_field_errors }}
     {{ form.errors.username }}
@@ -18,6 +18,15 @@
     {{ form.password2 }}<br></h1>
 
     <input type="submit" value="Create">
+</form>
+<br>
+<br> -->
+<form id="form">
+  {% csrf_token %}
+  <table>
+  {{ form.as_table }}
+  </table>
+  <input type="submit" value="create"/>
 </form>
 
 {% endblock %}

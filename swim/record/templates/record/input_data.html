@@ -1,22 +1,36 @@
-<!DOCTYPE html>
-<html lang="ja">
-
-<head>
-  <meta charset="utf-8">
-  <title></title>
-</head>
-
+{% extends 'base.html' %}
+{% block body %}
 <body>
-  <div>
-    <form method="GET" action="">
 
-      {{ menue_form.as_p }}
-    </form>
-    <form method="post" action="">
-      {{ time_result_form.as_p }}
+    <form method="post" action="{% url 'input_data' %}" id="form">
+      {% csrf_token %}
+      {{form.date}}<br>
+      メニュー:{{form.menue_name}}   距離:{{ form.style }}   スタイル:{{ form.distance }}m
 
+      <ol id="result">
+        <li class="form"><table>
+          <td>{{form2.time_minutes}}</td>
+          <td>{{form2.time_seconds}}</td>
+          <td>{{form2.time_seconds_micro}}</td>
+        </table></li>
+      </ol>
+
+      <button type="button" id="one_more" class="btn">one more</button><br>
+      <input type="submit" class="btn" value='submit'/>
     </form>
-  </div>
+
 </body>
 
-</html>
+<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+
+<script>
+  $(function() {
+    $('#one_more').on('click', function(){
+      var lastform = $('#result > li:last').clone(true);
+      $('#result').append(lastform);
+
+    });
+  });
+</script>
+
+{% endblock %}

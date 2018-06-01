@@ -18,7 +18,7 @@
       <p>
         スイムレコードからパクったデータを、<br> なんか良い感じのグラフで描写。</p>
       <h1>Swim Record Analytics</h1>
-      <a class="btn" href="http://127.0.0.1:8000/record/opinion_box/">やってみる</a>
+      <a class="btn" href="{% url 'opinion_box' %}">やってみる</a>
     </div>
   </header>
 
@@ -27,7 +27,7 @@
     <h2>Swim Swim Swim</h2>
     <div class="container">
       <div class="row">
-        <img src="{% static 'img/kikuta1.png' %}" width="300" height="400" alt="kikuta!" class="shadow" href="record/input_data">
+        <a  href="{% url 'input_data' %}"><img src="{% static 'img/kikuta1.png' %}" width="300" height="400" alt="kikuta!" class="shadow" href="record/input_data"></a>
         <div class="desc pull-right">
           <h3>すごい、菊田！</h3>
           <p>すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！</p>
@@ -40,7 +40,7 @@
     <h2>Reord Record Record</h2>
     <div class="container">
       <div class="row">
-        <img src="{% static 'img/sanai1.jpg' %}" width="300" height="400" alt="sanai!" class="shadow">
+        <a  href="{% url 'chart_view' %}"><img src="{% static 'img/sanai1.jpg' %}" width="300" height="400" alt="sanai!" class="shadow"></a>
         <div class="desc pull-left">
           <h3>すごい、さない！</h3>
           <p>すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！</p>
@@ -53,9 +53,9 @@
     <h2>Aoyama Aoyama Aoyama</h2>
     <div class="container">
       <div class="row">
-        <img src="{% static 'img/banana.png' %}"
+        <a  href="{% url 'input_data' %}"><img src="{% static 'img/banana.png' %}"
         width="400" height="300"
-        alt="banana!" >
+        alt="banana!" ></a>
         <div class="desc pull-right">
           <h3>バナナだよ。</h3>
           <p>すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！</p>
