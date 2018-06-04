@@ -21,7 +21,7 @@
 </form>
 <br>
 <br> -->
-<form id="form">
+<form id="form" method="post" action="{% url 'create' %}">
   {% csrf_token %}
   <table>
   {{ form.as_table }}

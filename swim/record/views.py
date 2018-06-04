@@ -1,15 +1,16 @@
 # from django.urls import reverse_lazy
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.http import JsonResponse, HttpResponse, Http404, HttpResponseRedirect
 # from django.views import View
 # from django.views.generic import ListView, TemplateView
 
 from django.contrib.auth.decorators import login_required
-# from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 
 from .models import Menue, Training, Result_Time
-from .forms import Menue_Form, Training_Form, Result_Time_Form, Users_Form, Select_Form
+from .forms import Menue_Form, Training_Form, Result_Time_Form,  Select_Form
 
 import json
 import os
@@ -35,16 +36,17 @@ Df16 = Df[Df.Team.isin(Team16)]
 
 def new(request):
     # form = UserCreationForm()
-    form = Users_Form()
+    form = UserCreationForm()
     return TemplateResponse(request, 'record/new.html', {'form': form,})
 def create(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('login.html')
+            # pass
+            return redirect('login.html')
         else:
-            return TemplateResponse(request, 'record/new.html', {'form': form,})
+            return render(request, 'record/new.html', {'form': form,})
     else:
         return Http404
 
@@ -155,36 +157,87 @@ def Input_Data(request):
 def ChartView(request):
     select_form = Select_Form()
     return TemplateResponse(request, 'record/chart_view.html',
-                            {'school_names': list(Team16),
+                            {'school_names': sorted(list(Team16)),
                             'select_form': select_form
 
                             })
 def ajax_chart(request):
-    school = request.GET.get('school_name')
+    # school = []
+    # year = []
+    # style=[]
+    # distance=[]
+    # sex=[]
 
-    dfa=Df[Df.Team==school]
+    schools = request.GET.get('school_name').replace("'", "")
+    years = request.GET.get('year').replace("'", "")
+    styles = request.GET.get('style').replace("'", "")
+    distances = request.GET.get('distance').replace("'", "")
+    sexs = request.GET.get('sex').replace("'", "")
+
+    # print(schools)
+    # print(type(schools))
+    # print('sexs', sexs, type(sexs))
+
+    school = schools[1:-1].replace(' ', '').split(',') if schools[0]=='[' else [schools]
+    year = years[1:-1].replace(' ', '').split(',') if years[0]=='[' else [years]
+    style = styles[1:-1].replace(' ', '').split(',') if styles[0]=='[' else [styles]
+    distance = distances[1:-1].replace(' ', '').split(',') if distances[0]=='[' else [distances]
+    sex = sexs[1:-1].replace(' ', '').split(',') if sexs[0]=='[' else [sexs]
+
+    # school = schools if type(schools)==list else [schools]
+    # year = years if type(years)==list else [years]
+    # style = styles if type(styles)==list else [styles]
+    # distance = distances if type(distances)==list else [distances]
+    # sex = sexs if type(sexs)==list else [sexs]
+
+    # [school.append(x) for x in [schools]]
+    # [year.append(x) for x in years]
+    # [style.append(x) for x in [styles]]
+    # [distance.append(x) for x in [distances]]
+    # [sex.append(x) for x in sexs]
+    # print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+    # print(type(years), type(distances), years, distances, sexs, styles)
+    # print(type(year), type(distance), year, distance, sex, style)
+
     col=['Name', 'Age', 'Sex', 'Style', 'Distance', 'Time', 'Rank', 'kyu']
 
-    fig, ax = plt.subplots()
-    ax = sns.boxplot(dfa.Year, dfa.kyu, hue='Sex', data=dfa)
-    canvas = FigureCanvasAgg(fig)
-    # response = HttpResponse(content_type='image/png')
-    # canvas.print_png(response)
+    try:
+        dfa = Df[Df.Competition == '16高']
+        # print(dfa.head())
+        dfa = dfa[(dfa.Team.isin(school))&
+        (dfa.Year.isin(year))&
+        (dfa.Style.isin(style))&
+        (dfa.Distance.isin(distance))&
+        (dfa.Sex.isin(sex))]
 
-    png_output = BytesIO()
-    canvas.print_png(png_output)
-    bs64 = b64encode(png_output.getvalue())
-    image = str(bs64)
-    image = image[2:-1]
+        table = dfa.to_html(index=False)
+        # print('##########1111#############')
+        # print(dfa.head())
 
-    table = dfa[(dfa.Year==2009)&(dfa.Competition=='16高')][col].to_html(index=False)
+        fig, ax = plt.subplots()
+        ax = sns.boxplot(dfa.Year, dfa.kyu, hue='Sex', data=dfa)
+        canvas = FigureCanvasAgg(fig)
+        # print('#########2222##############')
 
-    dict = json.dumps({'school': school, 'image': image, 'table': table})
+        png_output = BytesIO()
+        canvas.print_png(png_output)
+        bs64 = b64encode(png_output.getvalue())
+        image = str(bs64)
+        image = image[2:-1]
+        # print('#########33333##############')
 
-    response = HttpResponse(dict, content_type='application/json')
-    response["Access-Control-Allow-Origin"] = "*"
-    response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
-    response["Access-Control-Max-Age"] = "1000"
-    response["Access-Control-Allow-Headers"] = "*"
+        # table = dfa[(dfa.Year==2009)&(dfa.Competition=='16高')][col].to_html(index=False)
+        table = dfa[col].to_html(index=False)
 
-    return response
+        dict = json.dumps({'school': school, 'image': image, 'table': table})
+
+        response = HttpResponse(dict, content_type='application/json')
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+        response["Access-Control-Max-Age"] = "1000"
+        response["Access-Control-Allow-Headers"] = "*"
+
+        return response
+    except:
+        dict = json.dumps({'table':'No Data...'})
+        return HttpResponse(dict)

@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-AUTH_USER_MODEL = 'record.Users'
+# AUTH_USER_MODEL = 'record.Users'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -128,7 +128,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.normpath(os.path.join(BASE_DIR, 'assets')),
 )
-LOGIN_URL = '/login/'
+LOGIN_URL = '/record/login/'
 LOGIN_REDIRECT_URL = '/record/'
 # LOGIN_URL = '/login/'
 # LOGIN_REDIRECT_URL = '/record/index.html/'
