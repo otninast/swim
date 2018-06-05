@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Person, Menue, Training, Result_Time, Users
+from .models import Menue, Training, Result_Time
 
 import pandas as pd
 df = pd.read_csv('~/swimrecord/swim/record/Result_all.csv')

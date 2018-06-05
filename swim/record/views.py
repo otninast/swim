@@ -1,11 +1,7 @@
 # from django.urls import reverse_lazy
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from django.http import JsonResponse, HttpResponse, Http404, HttpResponseRedirect
-# from django.views import View
-# from django.views.generic import ListView, TemplateView
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 
@@ -35,7 +31,6 @@ Df16 = Df[Df.Team.isin(Team16)]
 
 
 def new(request):
-    # form = UserCreationForm()
     form = UserCreationForm()
     return TemplateResponse(request, 'record/new.html', {'form': form,})
 def create(request):
@@ -43,7 +38,6 @@ def create(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            # pass
             return redirect('login.html')
         else:
             return render(request, 'record/new.html', {'form': form,})
@@ -123,22 +117,23 @@ def OpinionBoxResult(request):
 
 @login_required
 def Input_Data(request):
-    form = Training_Form()
-    form2 = Result_Time_Form()
-    if request.method == 'POST':
 
+    if request.method == 'POST':
         t_min = request.POST.getlist('time_minutes')
         t_sec = request.POST.getlist('time_seconds')
         t_mic = request.POST.getlist('time_seconds_micro')
-
         form = Training_Form(request.POST)
 
         if form.is_valid():
-            form.save()
+            #form.save()→modelインスタンス生成
+            #model.userに直接user情報を入れる
+            #model.save()
+            training = form.save(commit=False)
+            training.user = request.user
+            training.save()
 
             for minute, second, micro in zip(t_min, t_sec, t_mic):
-                # training_id = Training.objects.get
-                result = Result_Time()
+                result = Result_Time(training=training)
                 result.time_minutes = minute
                 result.time_seconds = second
                 result.time_seconds_micro = micro
@@ -149,7 +144,8 @@ def Input_Data(request):
         else:
             return HttpResponseRedirect('record/input_data.html', {'form': form, 'form2': form2})
     else:
-
+        form = Training_Form()
+        form2 = Result_Time_Form()
         return TemplateResponse(request, 'record/input_data.html', {'form': form, 'form2': form2})
 
 

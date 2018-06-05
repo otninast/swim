@@ -5,7 +5,8 @@
     <form method="post" action="{% url 'input_data' %}" id="form">
       {% csrf_token %}
       {{form.date}}<br>
-      メニュー:{{form.menue_name}}   距離:{{ form.style }}   スタイル:{{ form.distance }}m
+      メニュー:{{form.menue_name}}   スタイル:{{ form.style }}   距離:{{ form.distance }}m
+      {{form.user}}
 
       <ol id="result">
         <li class="form"><table>

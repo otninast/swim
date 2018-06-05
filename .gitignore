@@ -1,6 +1,10 @@
 *.dblite3
 *.pyc
 *.swp
-./swim/opinion_box/*
+swim/opinion_box/
+swim/accounts/
 *.ipynb
 *.ipynb_checkpoints
+
+README.md
+tomoya.html
