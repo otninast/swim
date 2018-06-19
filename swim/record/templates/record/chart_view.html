@@ -1,34 +1,38 @@
 {% extends "base.html" %} {% block body %}
 
+<div class="row">
 
-<form id='school_name' action="127.0.0.1:8000/ajax_chart/" method="get">
-<label for="school_name_selector">学校名:</label>
-    <select id="school_name_selector" name="school_name">
-        {% for school_name in school_names %}
-        <option>
-        {{ school_name }}
-        </option>
-        {% endfor %}
-    </select>
-</form>
+    <div class="col-sm-2">
+      <form id='school_name' action="127.0.0.1:8000/ajax_chart/" method="get">
+        <label for="school_name_selector">学校名:</label>
+        <select id="school_name_selector" name="school_name" class="custom-select">
+            {% for school_name in school_names %}
+            <option>
+            {{ school_name }}
+            </option>
+            {% endfor %}
+        </select>
+      </form>
+      <table class="table table-striped">{{select_form.as_table}}</table>
+      <button type="button" id="decide" class="btn btn-primary">送信</button>
+    </div>
 
-<table>{{select_form.as_table}}</table>
+    <div id="result" class="col-sm-5">
+      <img class="img" src="">
+    </div>
 
-<button type="button" id="decide">送信</button>
+    <div id="table" class="table-sm table-striped col-sm-4">
+    </div>
 
-<div id="result">
-  <img class="img" src="">
-
-  <div id="table">
   </div>
 
-</div>
+{% endblock %}
 
 
 
+<!-- <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script> -->
 
-
-<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+{% block script %}
 
 <script>
   $(function() {
@@ -48,7 +52,13 @@
           var image_src = 'data:image/png;base64,' + response.image;
           $('.img').attr('src', image_src);
           // $('.img').fadeIn(800);
+          // response.table.attr('id', 'table1');
+
+
+
           $('#table').html(response.table);
+          $('.dataframe').attr('id', 'table1');
+          $('#table1').DataTable();
         },
         failure: function(responce) {
           alert('Got an error dude');

@@ -1,36 +1,65 @@
+{% extends 'base.html' %}
 {% load static %}
 
+{% block body %}
 
-<!DOCTYPE html>
-<html lang='ja'>
 
-<head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="{% static 'normalize.css' %}">
-  <link rel="icon" href="{% static 'img/favicon.png' %}">
-  <link rel="stylesheet" href="{% static 'styles.css' %}">
-  <title>Swim Rcord Analytics</title>
-</head>
+  <div id="accordion" role="tablist">
+    <div class="card">
+      <div class="card-header" role="tab" id="headingOne">
+        <h5 class="mb-0">
+          <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <button type="button" class="btn-lg btn-primary">TIME</button>
+          </a>
+        </h5>
+      </div>
 
-<body>
-  <header>
-    <div class="container">
-      <p>
-        スイムレコードからパクったデータを、<br> なんか良い感じのグラフで描写。</p>
-      <h1>Swim Record Analytics</h1>
-      <a class="btn" href="{% url 'opinion_box' %}">やってみる</a>
+      <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+        <div class="card-body">
+
+          <table id="table1" class="table table-sm table-striped">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Menue</th>
+                <th>Style</th>
+                <th>Distance</th>
+                <th>Num</th>
+                <th>Time</th>
+                <th>Is Rest</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for time in timelist %}
+              <tr>
+                <td>{{ time.training.date }}</td>
+                <td>{{ time.training.user }}</td>
+                <td>{{ time.training.menue_name }}</td>
+                <td>{{ time.training.style }}</td>
+                <td>{{ time.training.distance }}</td>
+                <td>{{ time.num_of_swim }}</td>
+                <td>{{ time.second }}</td>
+                <td>{{ time.rest }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+      </div>
     </div>
-  </header>
+  </div>
 
 
   <section class="featurs">
     <h2>Swim Swim Swim</h2>
     <div class="container">
       <div class="row">
-        <a  href="{% url 'input_data' %}"><img src="{% static 'img/kikuta1.png' %}" width="300" height="400" alt="kikuta!" class="shadow" href="record/input_data"></a>
+        <a  href="{% url 'input_data' %}"><img src="{% static 'img/kikuta1.png' %}" width="120" height="160" alt="kikuta!" class="shadow img-thumbnail" href="record/input_data"></a>
         <div class="desc pull-right">
-          <h3>すごい、菊田！</h3>
-          <p>すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！</p>
+          <h3>h3</h3>
+          <p>p</p>
         </div>
       </div>
     </div>
@@ -40,10 +69,10 @@
     <h2>Reord Record Record</h2>
     <div class="container">
       <div class="row">
-        <a  href="{% url 'chart_view' %}"><img src="{% static 'img/sanai1.jpg' %}" width="300" height="400" alt="sanai!" class="shadow"></a>
+        <a  href="{% url 'chart_view' %}"><img src="{% static 'img/sanai1.jpg' %}" width="120" height="160" alt="sanai!" class="shadow"></a>
         <div class="desc pull-left">
-          <h3>すごい、さない！</h3>
-          <p>すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！すごいよ！</p>
+          <h3>h3</h3>
+          <p>p</p>
         </div>
       </div>
     </div>
@@ -53,8 +82,8 @@
     <h2>Aoyama Aoyama Aoyama</h2>
     <div class="container">
       <div class="row">
-        <a  href="{% url 'input_data' %}"><img src="{% static 'img/banana.png' %}"
-        width="400" height="300"
+        <a  href="{% url 'test' %}"><img src="{% static 'img/banana.png' %}"
+        width="160" height="120"
         alt="banana!" ></a>
         <div class="desc pull-right">
           <h3>バナナだよ。</h3>
@@ -64,11 +93,7 @@
     </div>
   </section>
 
-<footer>
-  <p>otninast38.inc</p>
-  <div><a class="btn" href="{% url 'logout' %}">ログアウト</a></div>
-</footer>
 
-</body>
+{% endblock %}
 
-</html>
+{% block content %}{% endblock %}

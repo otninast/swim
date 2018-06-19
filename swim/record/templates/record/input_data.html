@@ -1,24 +1,38 @@
 {% extends 'base.html' %}
 {% block body %}
-<body>
 
-    <form method="post" action="{% url 'input_data' %}" id="form">
+  <form method="post" action="{% url 'input_data' %}" id="form">
+    <div class="form-group">
       {% csrf_token %}
-      {{form.date}}<br>
-      メニュー:{{form.menue_name}}   スタイル:{{ form.style }}   距離:{{ form.distance }}m
-      {{form.user}}
+        <label for="id_date">日付:</label>
+        {{form.date}}<br>
+        <div class="input-group input-group-lg form-inline mt-3">
+        <label for="id_menue_name">メニュー:</label> {{form.menue_name}}
+        <label for="id_style">スタイル:</label> {{ form.style }}
+        <label for="id_distance">距離:</label> {{ form.distance }}
+        <strong>m</strong>
+      </div>
 
       <ol id="result">
-        <li class="form"><table>
-          <td>{{form2.time_minutes}}</td>
-          <td>{{form2.time_seconds}}</td>
-          <td>{{form2.time_seconds_micro}}</td>
-        </table></li>
+
+        <li class="form mt-3">
+          <div class="form form-row form-inline">
+
+              <div class="input-group">{{form2.m_10}}{{form2.m_1}}</div>
+              <label for="id_s_10">:</label>
+              <div class="input-group">{{form2.s_10}}{{form2.s_1}}</div>
+              <label for="id_ms_10">:</label>
+              <div class="input-group">{{form2.ms_10}}{{form2.ms_1}}</div>
+            
+            <!-- {{form2.rest}} -->
+          </div>
+        </li>
       </ol>
 
-      <button type="button" id="one_more" class="btn">one more</button><br>
-      <input type="submit" class="btn" value='submit'/>
-    </form>
+      <button type="button" id="one_more" class="btn btn-secondary">one more</button><br>
+      <input type="submit" class="btn btn-primary mt-3" value='submit' />
+    </div>
+  </form>
 
 </body>
 
@@ -26,10 +40,24 @@
 
 <script>
   $(function() {
-    $('#one_more').on('click', function(){
-      var lastform = $('#result > li:last').clone(true);
-      $('#result').append(lastform);
+    $('form').on('click', '#one_more', function() {
 
+      var m_10 = $('.m_10:eq(-1) option:selected').val();
+      var m_1 = $('.m_1:eq(-1) option:selected').val();
+      var s_10 = $('.s_10:eq(-1) option:selected').val();
+      var s_1 = $('.s_1:eq(-1) option:selected').val();
+      var ms_10 = $('.ms_10:eq(-1) option:selected').val();
+      var ms_1 = $('.ms_1:eq(-1) option:selected').val();
+
+      var lastform = $('#result > li:eq(-1)').clone();
+      lastform.find('.m_10').val(m_10);
+      lastform.find('.m_1').val(m_1);
+      lastform.find('.s_10').val(s_10);
+      lastform.find('.s_1').val(s_1);
+      lastform.find('.ms_10').val(ms_10);
+      lastform.find('.ms_1').val(ms_1);
+
+      $('#result').append(lastform);
     });
   });
 </script>

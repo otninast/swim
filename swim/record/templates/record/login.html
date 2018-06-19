@@ -2,8 +2,10 @@
 {% block body %}
   <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
+    <div class="form-group">
     {{ form.as_p }}
-    <button class="btn btn-primary" type="submit">LOGIN</button>
+  </div>
+  <button class="btn btn-primary" type="submit">LOGIN</button>
+  <a href="{% url 'new' %}"><button type="button" class="btn btn-success">CREATE</button></a>
   </form>
-  <a href="{% url 'new' %}"><button class="btn">CREATE</button></a>
   {% endblock %}

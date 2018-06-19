@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+          {% for text in text_list %}
+            <div class="post-preview">
+                <a href="{% url 'detail' text.pk %}">
+                    <h2 class="post-title">
+                        {{ text.title }}
+                    </h2>
+                    <h3 class="post-subtitle">
+                        subtitle
+                    </h3>
+                </a>
+                <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on {{ text.date }}</p>
+            </div>
+            <hr>
+            {% endfor %}
+
+            <div class="post-preview">
+
+            <!-- Pager -->
+            <ul class="pager">
+                <li class="next">
+                    <a href="#">Older Posts &rarr;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

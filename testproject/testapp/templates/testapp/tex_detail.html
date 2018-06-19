@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block body %}
+
+
+    <h1>{{ text.title }}</h1>
+
+  <div>
+    <p>{{ text.text }}</p><br>
+    <p>{{ text.comment }}</p><br>
+  </div>
+  {{ text.date }}
+
+<div>
+<a class="btn btn-default" href="{% url 'update' object.pk %}" type="button">Edit</a>
+<a class="btn btn-danger" href="{% url 'delete' object.pk %}" type="button">Delete</a>
+</div>
+
+
+{% endblock %}

@@ -1,4 +1,4 @@
-# from django.urls import reverse_lazy
+from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from django.http import JsonResponse, HttpResponse, Http404, HttpResponseRedirect
@@ -46,7 +46,10 @@ def create(request):
 
 @login_required
 def Index(request):
-    return TemplateResponse(request, 'record/index.html')
+    timelist = Result_Time.objects.all()
+
+    context = {'timelist':timelist}
+    return TemplateResponse(request, 'record/index.html', context)
 
 
 @login_required
@@ -119,9 +122,13 @@ def OpinionBoxResult(request):
 def Input_Data(request):
 
     if request.method == 'POST':
-        t_min = request.POST.getlist('time_minutes')
-        t_sec = request.POST.getlist('time_seconds')
-        t_mic = request.POST.getlist('time_seconds_micro')
+        m_10 = [int(i) for i in request.POST.getlist('m_10')]
+        m_1 = [int(i) for i in request.POST.getlist('m_1')]
+        s_10 = [int(i) for i in request.POST.getlist('s_10')]
+        s_1 = [int(i) for i in request.POST.getlist('s_1')]
+        ms_10 = [float(i) for i in request.POST.getlist('ms_10')]
+        ms_1 = [float(i) for i in request.POST.getlist('ms_1')]
+
         form = Training_Form(request.POST)
 
         if form.is_valid():
@@ -132,14 +139,13 @@ def Input_Data(request):
             training.user = request.user
             training.save()
 
-            for minute, second, micro in zip(t_min, t_sec, t_mic):
+            for index, (m_10, m_1, s_10, s_1, ms_10, ms_1) in enumerate(zip(m_10, m_1, s_10, s_1, ms_10, ms_1)):
                 result = Result_Time(training=training)
-                result.time_minutes = minute
-                result.time_seconds = second
-                result.time_seconds_micro = micro
+                result.second = 60*(10*m_10 + m_1)+(10*s_10 + s_1)+(10*ms_10 + ms_1)/100
+                result.num_of_swim = index+1
                 result.save()
 
-            return HttpResponse(request, 'record/index.html')
+            return redirect(reverse_lazy('index'))
 
         else:
             return HttpResponseRedirect('record/input_data.html', {'form': form, 'form2': form2})
@@ -237,3 +243,7 @@ def ajax_chart(request):
     except:
         dict = json.dumps({'table':'No Data...'})
         return HttpResponse(dict)
+
+
+def Test(request):
+    return render(request, 'record/test.html')

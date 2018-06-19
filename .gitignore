@@ -3,8 +3,10 @@
 *.swp
 swim/opinion_box/
 swim/accounts/
+swim/templates
 *.ipynb
 *.ipynb_checkpoints
 
 README.md
 tomoya.html
+swim/templates/

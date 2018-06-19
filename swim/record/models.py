@@ -69,19 +69,25 @@ class Training(models.Model):
     style = models.CharField(choices=STYLE_CHOICES, max_length=10, null=True, blank=False)
 
     distance = models.IntegerField(choices=DISTANCE_CHOICES, null=True)
-    # def __str__(self):
+    def __str__(self):
+        return '{}, {}, {}'.format(self.user.username, self.date, self.menue_name.menue_name)
+
     #     label = '{0.menue_name} {0.self.date}'
     #     return label.format(self)
 
 class Result_Time(models.Model):
     # training = models.OneToOneField(Training, on_delete=models.CASCADE, null=True, blank=True, related_name='time')
     training = models.ForeignKey(Training, on_delete=models.CASCADE, null=True, blank=True)
-    time_minutes = models.IntegerField(verbose_name='分', default=0)
-    time_seconds = models.IntegerField(verbose_name='秒', default=0)
-    time_seconds_micro = models.IntegerField(verbose_name='コンマ秒', default=0)
-    # def __str__(self):
-    #     label = '{0.training.menue_name}  {0.self.training.date}'
-    #     return label.format(self)
+    # time_minutes = models.IntegerField(verbose_name='分', default=0)
+    # time_seconds = models.IntegerField(verbose_name='秒', default=0)
+    # time_seconds_micro = models.IntegerField(verbose_name='コンマ秒', default=0)
+    num_of_swim = models.IntegerField('本数', null=True)
+    second = models.FloatField('タイム[s]', null=True, blank=True)
+    rest = models.BooleanField('レスト', blank=True, default=False)
+    def __str__(self):
+        return '{}, {}'.format(self.training, self.num_of_swim)
+        # label = '{0.training.menue_name}  {0.self.training.date}'
+        # return label.format(self)
 
 
 

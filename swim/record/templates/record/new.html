@@ -23,10 +23,10 @@
 <br> -->
 <form id="form" method="post" action="{% url 'create' %}">
   {% csrf_token %}
-  <table>
+  <table class="table-bordered table-striped form-group">
   {{ form.as_table }}
   </table>
-  <input type="submit" value="create"/>
+  <input type="submit" class="btn btn-success" value="create"/>
 </form>
 
 {% endblock %}

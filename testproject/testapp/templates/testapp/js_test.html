@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<button type="button" id="start" onclick="func();">Start</button>
+<button type="button" id="stop">Stop</button>
+
+
+<script type="text/javascript">
+
+  var canvas = document.createElement("canvas");
+
+
+  var func = function() {
+    var ws = new WebSocket("ws://127.0.0.1:8000/testproject/ws");
+
+    ws.onopen = function() {
+      ws.send('test1');
+    };
+
+    ws.onerror = function(error) {
+      console.log("websocket error:" + error);
+    };
+
+    ws.onmessage = function(e) {
+      console.log("server: " + e.data);
+    };
+    // var btn = document.createElement("button");
+    // var br = document.createElement("br");
+
+    // btn.textContent = 'ボタン';
+
+    // var test = document.getElementByTagName("start");
+    // console.log(btn);
+    //
+    // document.body.appendChild(btn);
+    // document.body.appendChild(br);
+    // document.body.appendChild(canvas);
+  };
+
+
+
+  // var uri = "ws://" + location.host +"/sample/chat";
+  // var ws = new WebSocket("ws://192.168.10.10:8000");
+  //
+  // document.body.appendChild(canvas);
+
+</script>
+
+
+{% endblock %}

@@ -28,6 +28,18 @@ class Training_Form(forms.ModelForm):
         menue_name = forms.ModelChoiceField(Menue.objects)
 
 class Result_Time_Form(forms.ModelForm):
+    NUMBER  = [
+        (num, num) for num in range(0, 10)
+    ]
+    m_10 = forms.ChoiceField(choices=NUMBER, widget=forms.Select(attrs={'class': 'm_10 custom-select'}))
+    m_1 = forms.ChoiceField(choices=NUMBER, widget=forms.Select(attrs={'class': 'm_1 custom-select'}))
+    s_10 = forms.ChoiceField(choices=NUMBER, widget=forms.Select(attrs={'class': 's_10 custom-select'}))
+    s_1 = forms.ChoiceField(choices=NUMBER, widget=forms.Select(attrs={'class': 's_1 custom-select'}))
+    ms_10 = forms.ChoiceField(choices=NUMBER, widget=forms.Select(attrs={'class': 'ms_10 custom-select'}))
+    ms_1 = forms.ChoiceField(choices=NUMBER, widget=forms.Select(attrs={'class': 'ms_1 custom-select'}))
+
+    rest = forms.BooleanField()
+
     class Meta:
         model = Result_Time
         fields = '__all__'
@@ -61,12 +73,12 @@ class Select_Form(forms.Form):
     SEX_CHOICES.append((sex_list, 'all'))
 
 
-    year = forms.ChoiceField(choices=YEAR_CHOICES, label='年度')
-    sex = forms.ChoiceField(choices=SEX_CHOICES, label='性別')
-    style = forms.ChoiceField(choices=STYLE_CHOICES, label='スタイル')
+    year = forms.ChoiceField(choices=YEAR_CHOICES, label='年度', widget=forms.Select(attrs={'class': 'year custom-select'}))
+    sex = forms.ChoiceField(choices=SEX_CHOICES, label='性別', widget=forms.Select(attrs={'class': 'sex custom-select'}))
+    style = forms.ChoiceField(choices=STYLE_CHOICES, label='スタイル', widget=forms.Select(attrs={'class': 'style custom-select'}))
     # sex = forms.MultipleChoiceField(choices=SEX_CHOICES, label='性別', widget=forms.CheckboxSelectMultiple())
     # style = forms.ChoiceField(choices=STYLE_CHOICES, label='スタイル')
-    distance = forms.ChoiceField(choices=DISTANCE_CHOICES, label='距離')
+    distance = forms.ChoiceField(choices=DISTANCE_CHOICES, label='距離', widget=forms.Select(attrs={'class': 'distance custom-select'}))
 
 
 
