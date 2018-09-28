@@ -1,0 +1,120 @@
+{% extends 'base.html' %} {% block body %}
+<div class="container">
+  <h3>******************</h3>
+
+  <div class="row mx-auto my-5">
+    <table class="table table-responsive table-striped">
+
+      <thead>
+        <tr>
+          <th>名前</th>
+          <th>性</th>
+          <th>名</th>
+          <th>性別</th>
+          <th>代</th>
+          <th>スタイル</th>
+          <th>コース</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>{{ object.username }}</td>
+          <td>{{ object.user_info.familyname }}</td>
+          <td>{{ object.user_info.firstname }}</td>
+          <td>{{ object.user_info.sex }}</td>
+          <td>{{ object.user_info.generation }}</td>
+          <td>{{ object.user_info.style }}</td>
+          <td>{{ object.user_info.cource }}</td>
+        </tr>
+      </tbody>
+
+    </table>
+    <a href="{% url 'player_update' user.pk %}"><button type="button" class="btn-info">Update</button></a>
+
+  </div>
+
+
+  <!-- ************************************************************************************** -->
+  <hr>
+  <!-- ************************************************************************************** -->
+  <h3>******************</h3>
+
+  <div class="row">
+
+    <div class="col-sm-6 mx-auto">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-body">
+
+            <table id="table1" class="table table-border table-responsive text-nowrap">
+
+              <thead>
+                <tr>
+                  <th>い</th>
+                  <th>ろ</th>
+                  <th>は</th>
+                  <th>に</th>
+                  <th>ほ</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for time_ in time %}
+                <tr>
+                  <td>{{ time_.training.menue_name }}</td>
+                  <td>{{ time_.training }}</td>
+                  <td>{{ time_.time_str }}</td>
+                  <td>{{ time_ }}</td>
+                  <td>{{ time_ }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ************************************************************************************** -->
+
+    <div class="col-sm-6 mx-auto">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-body">
+
+            <table id="table2" class="table table-border table-responsive text-nowrap">
+
+              <thead>
+                <tr>
+                  <th>い</th>
+                  <th>ろ</th>
+                  <th>は</th>
+                  <th>に</th>
+                  <th>ほ</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for time_ in time_user %}
+                <tr>
+                  <td>{{ time_.training.menue_name }}</td>
+                  <td>{{ time_.training }}</td>
+                  <td>{{ time_.time_str }}</td>
+                  <td>{{ time_ }}</td>
+                  <td>{{ time_ }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+
+            </table>
+
+            <img src='{{ img_tag }}' class="img img-fluid">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

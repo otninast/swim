@@ -19,10 +19,18 @@
   <link rel="stylesheet" href="{% static 'styles_base.css' %}">
 </head>
 
+<!-- ****************************************************************************************** -->
+
 <body>
   <header>
-    <div class="container"></div>
+    <div class="container">
+      {% block header %}{% endblock %}
+    </div>
   </header>
+
+
+  <!-- ****************************************************************************************** -->
+
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Navbar</a>
@@ -38,6 +46,19 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'input_data' %}">Time Input</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'chart_view' %}">Chart</a>
+        </li>
+        {% if user.pk %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'player_info' user.pk %}">Profile</a>
+        </li>
+        {% endif %}
+        {% if user.user_info.is_manager %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'player_list' %}">Player List</a>
+        </li>
+        {% endif %}
       </ul>
       <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
@@ -46,18 +67,18 @@
     </div>
   </nav>
 
+<!-- ****************************************************************************************** -->
 
-
-  <div class="container-fluid bg-light my-5 mx-2">
+  <div class="container-fluid my-5 mx-2">
     <!-- <div class="container"> -->
-      <div class="jumbotron bg-white">
+      <div class="jumbotron bg-light">
         {% block body %}
         {% endblock %}
       </div>
     <!-- </div> -->
   </div>
 
-
+  <!-- ****************************************************************************************** -->
 
 {% block content %}
 {% endblock %}
@@ -82,6 +103,7 @@
 <script>
 $(function(){
 $('#table1').DataTable();
+$('#table2').DataTable();
 });
 // $(document).ready(function() {
 //     $("#table1").DataTable();

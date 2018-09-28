@@ -1,20 +1,42 @@
 {% extends 'base.html' %}
 {% block body %}
 
+<div class="content-fluid mb-5">
+<div class="row justify-content-center">
+
+<div class="card">
+
+<div class="card-header">
+<h5>練習のタイムを記録</h5>
+</div>
+
+
+<div class="card-body">
+
+
   <form method="post" action="{% url 'input_data' %}" id="form">
+
+<div class="container">
+<div class="row">
+<div class="col">
+
+
+
     <div class="form-group">
       {% csrf_token %}
         <label for="id_date">日付:</label>
         {{form.date}}<br>
-        <div class="input-group input-group-lg form-inline mt-3">
-        <label for="id_menue_name">メニュー:</label> {{form.menue_name}}
+        <div class="input-group input-group form-inline mt-3">
+        <label for="id_menue_name">メニュー:</label> {{ form.menue_name }}
         <label for="id_style">スタイル:</label> {{ form.style }}
         <label for="id_distance">距離:</label> {{ form.distance }}
         <strong>m</strong>
       </div>
 
-      <ol id="result">
+<hr class="my-3">
 
+
+      <ol id="result">
         <li class="form mt-3">
           <div class="form form-row form-inline">
 
@@ -24,19 +46,37 @@
               <label for="id_ms_10">:</label>
               <div class="input-group">{{form2.ms_10}}{{form2.ms_1}}</div>
             
-            <!-- {{form2.rest}} -->
+              <div>{{form2.rest}}</div>
           </div>
         </li>
       </ol>
 
       <button type="button" id="one_more" class="btn btn-secondary">one more</button><br>
+</div>
+
+	
+<div class="col">
+	{{form.point}}
+	{{form.impression}}
       <input type="submit" class="btn btn-primary mt-3" value='submit' />
     </div>
-  </form>
+  
+</div>
+</div>
+</div>
+   </form>
 
-</body>
 
-<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+</div>
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+<!-- <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script> -->
 
 <script>
   $(function() {
@@ -63,3 +103,5 @@
 </script>
 
 {% endblock %}
+
+
