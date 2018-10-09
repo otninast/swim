@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 from .models import Menue, Training, Result_Time, User_Info
-from .forms import Menue_Form, Training_Form, Result_Time_Form,  Select_Form, User_Info_Form, User_Update_Form
+from .forms import Menue_Form, Training_Form, Result_Time_Form, Select_Form, User_Info_Form, User_Update_Form
 
 import json
 import os
@@ -224,7 +224,7 @@ def ChartView(request):
     select_form = Select_Form()
     return TemplateResponse(request, 'record/chart_view.html',
                             {'school_names': sorted(list(Team16)),
-                            'select_form': select_form
+                             'select_form': select_form
                             })
 
 def ajax_chart(request):
@@ -288,9 +288,6 @@ def ajax_chart(request):
         dict = json.dumps({'table':'No Data...'})
         return HttpResponse(dict)
 
-
-def Test(request):
-    return render(request, 'record/test.html')
 
 
 def make_img(df):
