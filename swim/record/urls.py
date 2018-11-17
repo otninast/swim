@@ -30,10 +30,10 @@ urlpatterns = [
 
     # path(r'^player/<int:pk>/', views.Player_Info, name='player_info'),
 
-    url(r'^opinion_box/$', views.OpinionBox, name='opinion_box'),
-    url(r'^opinion_box_ajax/$', views.OpinionBoxAjax, name='opinion_box_ajax'),
-    url(r'^opinion_box_result/$', views.OpinionBoxResult, name='opinion_box_result'),
+    # url(r'^opinion_box/$', views.OpinionBox, name='opinion_box'),
+    # url(r'^opinion_box_ajax/$', views.OpinionBoxAjax, name='opinion_box_ajax'),
+    # url(r'^opinion_box_result/$', views.OpinionBoxResult, name='opinion_box_result'),
 
-    url(r'^test/$', views.Test, name='test'),
+    # url(r'^test/$', views.Test, name='test'),
 
 ]

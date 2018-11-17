@@ -1,0 +1,13 @@
+version: 2
+
+jobs:
+    docker:
+      - image: circleci/python3.6
+
+    steps:
+      - checkout
+
+      - run:
+          name: execute hello world
+          command: |
+            echo 'hello world'

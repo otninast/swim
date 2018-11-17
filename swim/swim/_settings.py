@@ -21,9 +21,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 's37vifs2u!ha_&1f&n+a_#sd5wmowvif$mc%d0_#(0ai(zn2s_'
+# SECRET_KEY = '~'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
 
 ALLOWED_HOSTS = []
 
@@ -41,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'record',
-    'opinion_box',
+#    'opinion_box',
     # 'accounts.apps.AccountsConfig',
 ]
 

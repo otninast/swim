@@ -66,12 +66,9 @@ def Index(request):
 
     end_w = date.today()
     start_w = end_w - timedelta(days = 7)
-
     end_m = date.today()
     start_m = end_m - timedelta(days = 30)
 
-    # timelist_week = Result_Time.objects.filter(training__date__range=(start_w, end_w))
-    # timelist_month = Result_Time.objects.filter(training__date__range=(start_m, end_m))
     timelist_week = Result_Time.objects.filter(training__user__exact=request.user).filter(training__date__range=(start_w, end_w))
     timelist_month = Result_Time.objects.filter(training__user__exact=request.user).filter(training__date__range=(start_m, end_m))
 
@@ -115,73 +112,6 @@ class Player_Update(generic.UpdateView):
 
 
 @login_required
-def OpinionBox(request):
-    path_to_opinion = os.path.join(os.path.join(os.path.dirname(__file__), 'opinion_box.csv'))
-    try:
-        os.remove(path_to_opinion)
-    except:
-        print('ありません')
-    return TemplateResponse(request, 'record/opinion_box.html')
-def OpinionBoxAjax(request):
-    try:
-        df = pd.read_csv(path_to_opinion)
-    except:
-        cols = ['Index','Time', 'Name', 'Sex', 'Themes', 'Text', 'Leng']
-        df = pd.DataFrame(index=[], columns=cols)
-
-    index = request.GET.get('index')
-    name = request.GET.get('name')
-    sex = request.GET.get('sex')
-    msg = request.GET.get('msg')
-    theme = request.GET.getlist('theme[]')
-    passind_time = request.GET.get('time')
-    leng = len(msg)
-
-    record = pd.Series([index, passind_time, name, sex, theme, msg, leng], index=df.columns)
-
-    df = df.append(record, ignore_index=True)
-    df.to_csv(path_to_opinion, index=False)
-
-
-
-    dict = json.dumps({'name': name,
-                        'sex': sex,
-                        'leng': leng,
-                        'theme': theme})
-
-    response = HttpResponse(dict, content_type='application/json')
-    response["Access-Control-Allow-Origin"] = "*"
-    response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
-    response["Access-Control-Max-Age"] = "1000"
-    response["Access-Control-Allow-Headers"] = "*"
-
-    return response
-def OpinionBoxResult(request):
-        df = pd.read_csv(path_to_opinion)
-
-
-        fig, ax = plt.subplots()
-        ax = df.Leng.plot()
-        canvas = FigureCanvasAgg(fig)
-
-        png_output = BytesIO()
-        canvas.print_png(png_output)
-        bs64 = b64encode(png_output.getvalue())
-        image = str(bs64)
-        image = image[2:-1]
-
-        dict = json.dumps({'image': image})
-
-        response = HttpResponse(dict, content_type='application/json')
-        response["Access-Control-Allow-Origin"] = "*"
-        response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
-        response["Access-Control-Max-Age"] = "1000"
-        response["Access-Control-Allow-Headers"] = "*"
-
-        return response
-
-
-@login_required
 def Input_Data(request):
 
     if request.method == 'POST':
@@ -218,7 +148,6 @@ def Input_Data(request):
         form2 = Result_Time_Form()
         return TemplateResponse(request, 'record/input_data.html', {'form': form, 'form2': form2})
 
-
 @login_required
 def ChartView(request):
     select_form = Select_Form()
@@ -226,7 +155,6 @@ def ChartView(request):
                             {'school_names': sorted(list(Team16)),
                              'select_form': select_form
                             })
-
 def ajax_chart(request):
     schools = request.GET.get('school_name').replace("'", "")
     years = request.GET.get('year').replace("'", "")

@@ -1,7 +1,7 @@
 
 # if __name__ == "__main__":
 
-bind = 'unix:/var/run/swim_project/swim.sock'
+bind = 'unix:/var/run/swim.sock'
 # bind = '127.0.0.1:50009'
 
 #workers = 2
