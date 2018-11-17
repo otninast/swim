@@ -71,10 +71,11 @@ h2:after {
 header {
   background: url('img/header.jpg');
   background-size: cover;
+  background-position: 90% 100%;
 }
 
 header .container {
-  width: 820px;
+  width: auto;
   margin: 0 auto;
   height: 340px;
   padding-top: 10px;

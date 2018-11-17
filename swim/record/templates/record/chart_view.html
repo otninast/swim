@@ -1,9 +1,9 @@
 {% extends "base.html" %} {% block body %}
 
 <div class="row">
-
-    <div class="col-sm-2">
-      <form id='school_name' action="127.0.0.1:8000/ajax_chart/" method="get">
+  <div class="jumbotron bg-light">
+    <div class="col-sm">
+      <form id='school_name' action="{% url 'ajax_chart' %}" method="get">
         <label for="school_name_selector">学校名:</label>
         <select id="school_name_selector" name="school_name" class="custom-select">
             {% for school_name in school_names %}
@@ -17,14 +17,14 @@
       <button type="button" id="decide" class="btn btn-primary">送信</button>
     </div>
 
-    <div id="result" class="col-sm-5">
-      <img class="img" src="">
+    <div id="result" class="col-sm">
+      <img class="img img-fluid" src="">
     </div>
 
-    <div id="table" class="table-sm table-striped col-sm-4">
+    <div id="table" class="table table-striped col-sm table-responsive">
     </div>
-
   </div>
+</div>
 
 {% endblock %}
 
@@ -38,7 +38,7 @@
   $(function() {
     $("#decide").click(function() {
       $.ajax({
-        url: "http://127.0.0.1:8000/record/ajax_chart/",
+        url: "/record/ajax_chart/",
         type: "GET",
         data: {
           'school_name': $('#school_name_selector').val(),

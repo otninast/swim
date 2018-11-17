@@ -1,31 +1,54 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm
 
-from .models import Menue, Training, Result_Time
+from .models import Menue, Training, Result_Time, User_Info
+
+import os
 
 import pandas as pd
-df = pd.read_csv('~/swimrecord/swim/record/Result_all.csv')
 
 
+path = os.path.join(os.path.join(os.path.dirname(__file__), 'Result_all.csv'))
+df = pd.read_csv(path)
+
+class User_Info_Form(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(User_Info_Form, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+    class Meta:
+        model = User_Info
+        # fields = '__all__'
+        exclude = ['user', 'is_manager', 'is_courch', ]
 
 
+class User_Update_Form(User_Info_Form, UserChangeForm):
 
-# class Users_Form(forms.ModelForm):
-#     class Meta:
-#         model = User
-#         # fields = '__all__'
-#         exclude = ['user_permissions', 'is_staff', 'groups', 'is_active', 'is_superuser', 'last_login', 'date_joined']
+    class Meta:
+        model = User
+        # model = User_Info
+        fields = '__all__'
+        # exclude = ['user', 'is_manager', 'is_courch', ]
+
 
 class Menue_Form(forms.ModelForm):
     class Meta:
         model = Menue
         fields = '__all__'
 
+
 class Training_Form(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(Training_Form, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
     class Meta:
         model = Training
         fields = '__all__'
-        menue_name = forms.ModelChoiceField(Menue.objects)
+        # menue_name = forms.ModelChoiceField(Menue.objects)
+
 
 class Result_Time_Form(forms.ModelForm):
     NUMBER  = [

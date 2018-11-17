@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 
 from . import views
@@ -22,10 +23,17 @@ urlpatterns = [
     url(r'^ajax_chart/', views.ajax_chart, name='ajax_chart'),
     url(r'^chart/$', views.ChartView, name='chart_view'),
 
-    url(r'^opinion_box/$', views.OpinionBox, name='opinion_box'),
-    url(r'^opinion_box_ajax/$', views.OpinionBoxAjax, name='opinion_box_ajax'),
-    url(r'^opinion_box_result/$', views.OpinionBoxResult, name='opinion_box_result'),
+    url(r'^player_list/$', views.Player_List, name='player_list'),
+    url(r'^player/(?P<pk>[0-9]+)/$', views.Player_Info.as_view(), name='player_info'),
+    url(r'^player_update/(?P<pk>[0-9]+)/$', views.Player_Update.as_view(), name='player_update'),
+    # url(r'^player_update/(?P<pk>[0-9]+)/$', views.Player_Update, name='player_update'),
 
-    url(r'^test/$', views.Test, name='test'),
+    # path(r'^player/<int:pk>/', views.Player_Info, name='player_info'),
+
+    # url(r'^opinion_box/$', views.OpinionBox, name='opinion_box'),
+    # url(r'^opinion_box_ajax/$', views.OpinionBoxAjax, name='opinion_box_ajax'),
+    # url(r'^opinion_box_result/$', views.OpinionBoxResult, name='opinion_box_result'),
+
+    # url(r'^test/$', views.Test, name='test'),
 
 ]

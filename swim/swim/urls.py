@@ -28,6 +28,6 @@ urlpatterns = [
     # path('accounts/', include('django.contrib.auth.urls')),
 
     url(r'^record/', include('record.urls')),
-    url(r'^opinion_box/', include('opinion_box.urls')),
+#    url(r'^opinion_box/', include('opinion_box.urls')),
 
 ]

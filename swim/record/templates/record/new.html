@@ -1,32 +1,25 @@
-{% extends "base.html" %}
-{% block body %}
+{% extends "base.html" %} {% block body %}
 
-<!-- <form method="post" action="{% url 'create' %}">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-    {{ form.errors.username }}
+<div class="row justify-content-center">
+<div class="card">
+  <div class="card-header">
+    <h5>User Create</h5>
+  </div>
 
-    <h1><label>Name:     </label>
-    {{ form.username }}<br></h1>
+  <div class="card-body">
+    <div class="table-responsive">
+      <form id="form" method="post" action="{% url 'create' %}">
+        {% csrf_token %}
+        <table class="table-bordered table-striped form-group text-nowrap">
+          {{ form.as_table }}
+          {{ user_info_form.as_table }}
+        </table>
+        <input type="submit" class="btn btn-success" value="create" />
+      </form>
+    </div>
+  </div>
 
-    <h1><label>Password: </label>
-    {{ form.errors.password1 }}
-    {{ form.password1 }}<br></h1>
-
-    <h1><label>Again:    </label>
-    {{ form.errors.password2 }}
-    {{ form.password2 }}<br></h1>
-
-    <input type="submit" value="Create">
-</form>
-<br>
-<br> -->
-<form id="form" method="post" action="{% url 'create' %}">
-  {% csrf_token %}
-  <table class="table-bordered table-striped form-group">
-  {{ form.as_table }}
-  </table>
-  <input type="submit" class="btn btn-success" value="create"/>
-</form>
+</div>
+</div>
 
 {% endblock %}

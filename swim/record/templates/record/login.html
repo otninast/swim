@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block body %}
+
+<div class="card mx-auto" style="width: 400px;">
+<div class="card-header">
+ログイン
+</div>
+
+<div class="card-body">
   <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
     <div class="form-group">
@@ -8,4 +15,8 @@
   <button class="btn btn-primary" type="submit">LOGIN</button>
   <a href="{% url 'new' %}"><button type="button" class="btn btn-success">CREATE</button></a>
   </form>
-  {% endblock %}
+</div>
+
+</div>
+
+{% endblock %}
