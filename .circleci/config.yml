@@ -9,6 +9,5 @@ jobs:
           name: run test
           command: |
             cd swim
-            ls
-          # pip install -r requirements.txt
-          # python ./manage.py test
+            pip install -r requirements.txt
+            python ./manage.py test
