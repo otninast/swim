@@ -6,6 +6,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: execute hello world
+          name: run test
           command: |
-            echo "hello world"
+            echo pwd
