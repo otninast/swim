@@ -6,8 +6,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: run test
+          name: pip install
           command: |
             cd swim
             pip install -r requirements.txt
+      - run:
+          name: run test
+          command: |
             python ./manage.py test
