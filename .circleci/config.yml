@@ -6,8 +6,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: chown
+          name: chown site-packages
           command: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages/
+      - run:
+          name: chown usr/bin
+          command: sudo chown -R circleci:circleci /usr/local/bin
       - run:
           name: pip install
           command: |
