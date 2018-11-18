@@ -8,4 +8,9 @@ jobs:
       - run:
           name: run test
           command: |
-            pwd
+            python ./manage.py test
+      - run:
+          name: run test2
+          command: |
+            cd swim
+            python ./manage.py test
