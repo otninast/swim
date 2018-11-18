@@ -8,9 +8,5 @@ jobs:
       - run:
           name: run test
           command: |
-            python ./manage.py test
-      - run:
-          name: run test2
-          command: |
             cd swim
             python ./manage.py test
