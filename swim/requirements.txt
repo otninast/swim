@@ -1,0 +1,15 @@
+amazon-linux-extras==1.6.3
+iniparse==0.4
+kiwisolver==1.0.1
+numpy==1.15.4
+pandas==0.23.4
+pycurl==7.19.0
+pygpgme==0.3
+pyliblzma==0.5.3
+python-dateutil==2.7.5
+pytz==2018.7
+pyxattr==0.5.1
+scipy==1.1.0
+six==1.11.0
+urlgrabber==3.10
+yum-metadata-parser==1.1.4
