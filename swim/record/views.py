@@ -3,20 +3,20 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic.edit import ModelFormMixin
 from django.template.response import TemplateResponse
-from django.http import JsonResponse, HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.contrib.auth.mixins import PermissionRequiredMixin
+# from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
-from .models import Menue, DayMenu, TrainingMenu, Result_Time, User_Info
-from .forms import Menue_Form, DayMenu_Form, TrainingMenu_Form, Result_Time_Form, Select_Form, User_Info_Form, User_Update_Form, Rap_Time_Form
+from .models import DayMenu, TrainingMenu, Result_Time, User_Info
+from .forms import DayMenu_Form, TrainingMenu_Form, Result_Time_Form, Select_Form, User_Info_Form
 
 import json
 import os
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 
 
 import pandas as pd
@@ -33,7 +33,6 @@ from base64 import b64encode
 from io import BytesIO
 
 PATH = os.path.join(os.path.join(os.path.dirname(__file__), 'Result_all.csv'))
-# PATH = os.path.join(os.path.dirname(__file__), 'Result_all.csv')
 Df = pd.read_csv(PATH)
 Team16 = set(Df[Df.Competition == '16高'].Team)
 Df16 = Df[Df.Team.isin(Team16)]
@@ -44,6 +43,8 @@ def new(request):
     user_info_form = User_Info_Form()
     context = {'form': form, 'user_info_form': user_info_form}
     return TemplateResponse(request, 'record/new.html', context)
+
+
 def create(request):
     form = UserCreationForm()
     user_info_form = User_Info_Form()
@@ -60,6 +61,7 @@ def create(request):
             return render(request, 'record/new.html', context)
     else:
         return Http404
+
 
 @login_required
 def Index(request):
@@ -80,36 +82,35 @@ def Index(request):
                 }
     return TemplateResponse(request, 'record/index.html', context)
 
+
 @login_required
 def Player_List(request):
     player_list = User.objects.all()
     context = {'player_list': player_list}
     return render(request, 'record/player_list.html', context)
 
+
 class Player_Info(generic.DetailView):
     model = User
     template_name = 'record/player.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['time'] = Result_Time.objects.all()
         context['time_user'] = Result_Time.objects.filter(training__user__exact=self.request.user)
         df = read_frame(context['time_user'])
         context['img_tag'] = make_img(df.second)
-        # print(df)
-        # for k in context['time_user']:
-        #     print(k)
 
         return context
 
+
 class Player_Update(generic.UpdateView):
     model = User_Info
-    # form_class = UserChangeForm
     form_class = User_Info_Form
-    # fields = '__all__'
     template_name = 'record/player_update.html'
+
     def get_success_url(self):
         return reverse_lazy('player_info', kwargs={'pk': self.kwargs['pk']})
-
 
 
 @login_required
@@ -160,6 +161,7 @@ def Input_Data(request):
                     'result_time_form': result_time_form,
                     'rap_time_form': rap_time_form})
 
+
 @login_required
 def ChartView(request):
     select_form = Select_Form()
@@ -167,6 +169,8 @@ def ChartView(request):
                             {'school_names': sorted(list(Team16)),
                              'select_form': select_form
                             })
+
+
 def ajax_chart(request):
     schools = request.GET.get('school_name').replace("'", "")
     years = request.GET.get('year').replace("'", "")
@@ -174,17 +178,11 @@ def ajax_chart(request):
     distances = request.GET.get('distance').replace("'", "")
     sexs = request.GET.get('sex').replace("'", "")
 
-    print(type(years), years)
-
     school = schools[1:-1].replace(' ', '').split(',') if schools[0]=='[' else [schools]
     year = years[1:-1].replace(' ', '').split(',') if years[0]=='[' else [years]
     style = styles[1:-1].replace(' ', '').split(',') if styles[0]=='[' else [styles]
     distance = distances[1:-1].replace(' ', '').split(',') if distances[0]=='[' else [distances]
     sex = sexs[1:-1].replace(' ', '').split(',') if sexs[0]=='[' else [sexs]
-
-    print(type(year), year)
-    print(type(year[0]), year[0])
-
     col = ['Name', 'Age', 'Sex', 'Style', 'Distance', 'Time', 'Rank', 'kyu']
 
     try:
@@ -197,19 +195,16 @@ def ajax_chart(request):
                     (dfa.Sex.isin(sex))]
 
         table = dfc.to_html(index=False)
-        # print('##########1111#############')
 
         fig, ax = plt.subplots()
         ax = sns.boxplot(dfc.Year, dfc.kyu, hue='Sex', data=dfc)
         canvas = FigureCanvasAgg(fig)
-        # print('#########2222##############')
 
         png_output = BytesIO()
         canvas.print_png(png_output)
         bs64 = b64encode(png_output.getvalue())
         image = str(bs64)
         image = image[2:-1]
-        # print('#########33333##############')
 
         # table = dfa[(dfa.Year==2009)&(dfa.Competition=='16高')][col].to_html(index=False)
         table = dfc[col].to_html(index=False)
@@ -233,22 +228,14 @@ def make_img(df):
     fig, ax = plt.subplots()
     ax = df.plot()
     canvas = FigureCanvasAgg(fig)
-
     png_output = BytesIO()
     canvas.print_png(png_output)
     bs64 = b64encode(png_output.getvalue())
     image = str(bs64)
     image = image[2:-1]
-
-    # img_tag = "<img src='data:image/png;base64," + image + "/>"
-    # img_tag = "<img src='data:image/png;base64,{}>".format(image)
     img_tag = 'data:image/png;base64,{}'.format(image)
 
     return img_tag
-
-
-
-
 
 
 class TopPage(generic.ListView, ModelFormMixin):
@@ -278,7 +265,6 @@ class TopPage(generic.ListView, ModelFormMixin):
 
         return context
 
-
     def get(self, request, *args, **kwargs):
         self.object = None
         return super().get(request, *args, **kwargs)
@@ -303,55 +289,10 @@ class Training_Detail(generic.DetailView):
         context = super().get_context_data(**kwargs)
         obj = self.get_object()
         training = TrainingMenu.objects.filter(daymenu=obj)
-        # time = [i for i in training]
-        time_ = [i.get_times() for i in training]
-
-        # print(training)
-        # print(time)
-        print(time_[0], time_[1])
-        # print([print(i) for i in [[1, 2, 3], [4, 5]]])
-        # print([print(i[0]) for i in time_])
-        x = [i.times for i in training.objects.all()]
-        print(x[0])
         context['training'] = training
-        data = [read_frame(i) for i in x]
-        # print(data)
-        script, div = bokeh_graph(data)
-
-        context['script'] = script
-        context['div'] = div
         return context
 
 
-def test_view(request):
-    from .forms import Time_Form, Rap_Form, Menu_Test_Form
-    if request.method == 'POST':
-        context = test2_view(request)
-        return HttpResponseRedirect('test2.html', context)
-
-    else:
-
-        context = {'daymenu_form': DayMenu_Form,
-                   'trainingmenu_form': TrainingMenu_Form,
-                   'form': Menu_Test_Form,
-                   'time_form': Time_Form,
-                   'rap_form': Rap_Form}
-        return TemplateResponse(request, 'record/test.html', context)
-def test2_view(request):
-    from django import forms
-    from .forms import Time_Form, Rap_Form, Menu_Test_Form, Sample_Form
-    data = int(request.POST.get('number'))
-    # print(data.get('number'))
-    form = forms.Form()
-    for i in range(data):
-        form.fields['value_{}'.format(i)] = forms.CharField(max_length=10)
-
-    context = {'time_form': Time_Form,
-               'rap_form': Rap_Form,
-               'sample_form': form}
-    return context
-    print(form)
-    return TemplateResponse(request, 'record/test2.html', context)
 
 def input(request):
 
@@ -394,10 +335,6 @@ def bokeh_graph(data):
 
     p = figure()
     p.line(data.index, data.distance, color='red')
-    # p.circle(x='time', y=jitter('day', width=0.45, range=p.y_range),  source=source, alpha=0.3)
-    # p.xaxis[0].formatter.days = ['%Hh']
-    # p.x_range.range_padding = 0
-    # p.ygrid.grid_line_color = None
 
     script, div = components(p)
     return script, div

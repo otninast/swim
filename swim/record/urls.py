@@ -1,5 +1,4 @@
 from django.conf.urls import url
-from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 
 from . import views
@@ -28,7 +27,4 @@ urlpatterns = [
 
     url(r'^top/$', views.TopPage.as_view(), name='top'),
     url(r'^top/(?P<pk>[0-9]+)/$', views.Training_Detail.as_view(), name='detail'),
-
-    url(r'^test', views.test_view, name='test'),
-    url(r'^test2', views.test2_view, name='test2'),
 ]

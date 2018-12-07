@@ -1,11 +1,6 @@
-
 from django.db import models
-# from django.core.mail import send_mail
 from django.contrib.auth.models import User
-
-# from datetime import date
 from django.utils import timezone
-# from record import views
 
 SEX_CHOICES = (
     ('M', 'Man'),
@@ -82,7 +77,6 @@ class Result_Time(models.Model):
     order = models.IntegerField('本数', null=True)
     time = models.FloatField('タイム[s]', null=True, blank=True)
     rest = models.NullBooleanField('レスト', blank=True, default=False)
-
 
     def __str__(self):
         return '{}'.format(self.order)
