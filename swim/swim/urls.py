@@ -18,16 +18,8 @@ from django.urls import path
 from django.conf.urls import include, url
 
 
-#from record.views import BlogListView, simple_chart
-
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('accounts/', include('accounts.urls')),
-    # path('accounts/', include('django.contrib.auth.urls')),
-
     url(r'^record/', include('record.urls')),
-#    url(r'^opinion_box/', include('opinion_box.urls')),
-
 ]

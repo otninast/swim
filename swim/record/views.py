@@ -1,6 +1,7 @@
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.views import generic
+from django.views.generic.edit import ModelFormMixin
 from django.template.response import TemplateResponse
 from django.http import JsonResponse, HttpResponse, Http404, HttpResponseRedirect
 
@@ -10,8 +11,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
-from .models import Menue, Training, Result_Time, User_Info
-from .forms import Menue_Form, Training_Form, Result_Time_Form, Select_Form, User_Info_Form, User_Update_Form
+from .models import Menue, DayMenu, TrainingMenu, Result_Time, User_Info
+from .forms import Menue_Form, DayMenu_Form, TrainingMenu_Form, Result_Time_Form, Select_Form, User_Info_Form, User_Update_Form, Rap_Time_Form
 
 import json
 import os
@@ -69,13 +70,13 @@ def Index(request):
     end_m = date.today()
     start_m = end_m - timedelta(days = 30)
 
-    timelist_week = Result_Time.objects.filter(training__user__exact=request.user).filter(training__date__range=(start_w, end_w))
-    timelist_month = Result_Time.objects.filter(training__user__exact=request.user).filter(training__date__range=(start_m, end_m))
+    timelist_week = Result_Time.objects.filter(trainingmenu__daymenu__user__exact=request.user).filter(trainingmenu__daymenu__date__range=(start_w, end_w))
+    timelist_month = Result_Time.objects.filter(trainingmenu__daymenu__user__exact=request.user).filter(trainingmenu__daymenu__date__range=(start_m, end_m))
 
     context = {'timelist_week':timelist_week,
                 'timelist_month': timelist_month,
                 'user_info_form': user_info_form,
-                # 'user': request.user,
+                'username': str(request.user),
                 }
     return TemplateResponse(request, 'record/index.html', context)
 
@@ -122,31 +123,42 @@ def Input_Data(request):
         ms_10_ = [int(i) for i in request.POST.getlist('ms_10')]
         ms_1_ = [int(i) for i in request.POST.getlist('ms_1')]
 
-        form = Training_Form(request.POST)
+        daymenu_form = DayMenu_Form(data=request.POST)
+        trainingmenu_form = TrainingMenu_Form(data=request.POST)
 
-        if form.is_valid():
-            #form.save()...modelインスタンス生成
-            #model.userに直接user情報を入れる
-            #model.save()
-            training = form.save(commit=False)
-            training.user = request.user
+        if daymenu_form.is_valid() and trainingmenu_form.is_valid():
+            training = trainingmenu_form.save(commit=False)
+            daymenu = daymenu_form.save(commit=False)
+            daymenu.user = request.user
+            daymenu.save()
+            training.daymenu = daymenu
+            print(training.daymenu, daymenu)
             training.save()
 
             for index, (m_10, m_1, s_10, s_1, ms_10, ms_1) in enumerate(zip(m_10_, m_1_, s_10_, s_1_, ms_10_, ms_1_)):
-                result = Result_Time(training=training)
-                result.second = 60*(10*m_10 + m_1)+(10*s_10 + s_1)+(10*float(ms_10) + float(ms_1))/100
-                result.num_of_swim = index+1
+                result = Result_Time(trainingmenu=training)
+                result.time = 60*(10*m_10 + m_1)+(10*s_10 + s_1)+(10*float(ms_10) + float(ms_1))/100
+                result.order = index+1
                 result.time_str = '{}{}:{}{}.{}{}'.format(m_10, m_1, s_10, s_1, ms_10, ms_1)
                 result.save()
 
+            print('成功')
             return redirect(reverse_lazy('index'))
 
         else:
-            return HttpResponseRedirect('record/input_data.html', {'form': form, 'form2': form2})
+            print('失敗')
+            return redirect(reverse_lazy('index'))
+
     else:
-        form = Training_Form()
-        form2 = Result_Time_Form()
-        return TemplateResponse(request, 'record/input_data.html', {'form': form, 'form2': form2})
+        daymenu_form = DayMenu_Form()
+        trainingmenu_form = TrainingMenu_Form()
+        result_time_form = Result_Time_Form()
+        rap_time_form = Rap_Time_Form()
+        return TemplateResponse(request, 'record/input_data.html',
+                    {'daymenu_form': daymenu_form,
+                    'trainingmenu_form': trainingmenu_form,
+                    'result_time_form': result_time_form,
+                    'rap_time_form': rap_time_form})
 
 @login_required
 def ChartView(request):
@@ -173,16 +185,16 @@ def ajax_chart(request):
     print(type(year), year)
     print(type(year[0]), year[0])
 
-    col=['Name', 'Age', 'Sex', 'Style', 'Distance', 'Time', 'Rank', 'kyu']
+    col = ['Name', 'Age', 'Sex', 'Style', 'Distance', 'Time', 'Rank', 'kyu']
 
     try:
         dfa = Df[Df.Competition == '16高']
 
-        dfc = dfa[(dfa.Team.isin(school))&
-        (dfa.Year.isin(year))&
-        (dfa.Style.isin(style))&
-        (dfa.Distance.isin(distance))&
-        (dfa.Sex.isin(sex))]
+        dfc = dfa[(dfa.Team.isin(school)) &
+                    (dfa.Year.isin(year)) &
+                    (dfa.Style.isin(style)) &
+                    (dfa.Distance.isin(distance)) &
+                    (dfa.Sex.isin(sex))]
 
         table = dfc.to_html(index=False)
         # print('##########1111#############')
@@ -217,7 +229,6 @@ def ajax_chart(request):
         return HttpResponse(dict)
 
 
-
 def make_img(df):
     fig, ax = plt.subplots()
     ax = df.plot()
@@ -234,3 +245,159 @@ def make_img(df):
     img_tag = 'data:image/png;base64,{}'.format(image)
 
     return img_tag
+
+
+
+
+
+
+class TopPage(generic.ListView, ModelFormMixin):
+    model = DayMenu
+    fields = '__all__'
+    # context_object_name = 'request_users_daymenus'
+    success_url = reverse_lazy('top')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        data = DayMenu.objects.filter(user=self.request.user).order_by('-date')
+        # xx = data[2].trainingmenus.all()[0].times.all()
+        # xxx = [xx[i].time for i in range(len(xx))]
+        # df = pd.DataFrame(data=xxx)
+        # df = read_frame(context['time_user'])
+
+        context['request_users_daymenus'] = data
+        # context['img'] = make_img(df)
+        daymenu_form = DayMenu_Form()
+        trainingmenu_form = TrainingMenu_Form()
+        result_time_form = Result_Time_Form()
+
+        context['daymenu_form'] = daymenu_form
+        context['trainingmenu_form'] = trainingmenu_form
+        context['result_time_form'] = result_time_form
+
+        return context
+
+
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        self.object_list = self.get_queryset()
+        form = self.get_form()
+        # if form.is_valid():
+        #     return self.form_valid(form)
+        # else:
+        #     return self.form_invalid(form)
+        input(request)
+        print(self.form_valid(form))
+        return self.form_valid(form)
+
+
+class Training_Detail(generic.DetailView):
+    model = DayMenu
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        obj = self.get_object()
+        training = TrainingMenu.objects.filter(daymenu=obj)
+        # time = [i for i in training]
+        time_ = [i.get_times() for i in training]
+
+        # print(training)
+        # print(time)
+        print(time_[0], time_[1])
+        # print([print(i) for i in [[1, 2, 3], [4, 5]]])
+        # print([print(i[0]) for i in time_])
+        x = [i.times for i in training.objects.all()]
+        print(x[0])
+        context['training'] = training
+        data = [read_frame(i) for i in x]
+        # print(data)
+        script, div = bokeh_graph(data)
+
+        context['script'] = script
+        context['div'] = div
+        return context
+
+
+def test_view(request):
+    from .forms import Time_Form, Rap_Form, Menu_Test_Form
+    if request.method == 'POST':
+        context = test2_view(request)
+        return HttpResponseRedirect('test2.html', context)
+
+    else:
+
+        context = {'daymenu_form': DayMenu_Form,
+                   'trainingmenu_form': TrainingMenu_Form,
+                   'form': Menu_Test_Form,
+                   'time_form': Time_Form,
+                   'rap_form': Rap_Form}
+        return TemplateResponse(request, 'record/test.html', context)
+def test2_view(request):
+    from django import forms
+    from .forms import Time_Form, Rap_Form, Menu_Test_Form, Sample_Form
+    data = int(request.POST.get('number'))
+    # print(data.get('number'))
+    form = forms.Form()
+    for i in range(data):
+        form.fields['value_{}'.format(i)] = forms.CharField(max_length=10)
+
+    context = {'time_form': Time_Form,
+               'rap_form': Rap_Form,
+               'sample_form': form}
+    return context
+    print(form)
+    return TemplateResponse(request, 'record/test2.html', context)
+
+def input(request):
+
+    m_10_ = [int(i) for i in request.POST.getlist('m_10')]
+    m_1_ = [int(i) for i in request.POST.getlist('m_1')]
+    s_10_ = [int(i) for i in request.POST.getlist('s_10')]
+    s_1_ = [int(i) for i in request.POST.getlist('s_1')]
+    ms_10_ = [int(i) for i in request.POST.getlist('ms_10')]
+    ms_1_ = [int(i) for i in request.POST.getlist('ms_1')]
+
+    daymenu_form = DayMenu_Form(data=request.POST)
+    trainingmenu_form = TrainingMenu_Form(data=request.POST)
+
+    if daymenu_form.is_valid() and trainingmenu_form.is_valid():
+        training = trainingmenu_form.save(commit=False)
+        daymenu = daymenu_form.save(commit=False)
+        daymenu.user = request.user
+        daymenu.save()
+        training.daymenu = daymenu
+        training.save()
+
+        for index, (m_10, m_1, s_10, s_1, ms_10, ms_1) in enumerate(zip(m_10_, m_1_, s_10_, s_1_, ms_10_, ms_1_)):
+            result = Result_Time(trainingmenu=training)
+            result.time = 60*(10*m_10 + m_1)+(10*s_10 + s_1)+(10*float(ms_10) + float(ms_1))/100
+            result.order = index+1
+            result.time_str = '{}{}:{}{}.{}{}'.format(m_10, m_1, s_10, s_1, ms_10, ms_1)
+            result.save()
+
+
+        return redirect(reverse_lazy('index'))
+
+    else:
+
+        return redirect(reverse_lazy('index'))
+
+def bokeh_graph(data):
+    from bokeh.plotting import figure
+    # from bokeh.transform import jitter
+    from bokeh.embed import components
+
+    p = figure()
+    p.line(data.index, data.distance, color='red')
+    # p.circle(x='time', y=jitter('day', width=0.45, range=p.y_range),  source=source, alpha=0.3)
+    # p.xaxis[0].formatter.days = ['%Hh']
+    # p.x_range.range_padding = 0
+    # p.ygrid.grid_line_color = None
+
+    script, div = components(p)
+    return script, div

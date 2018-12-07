@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block script_head %}
+
+<link href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.14.min.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.14.min.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.14.min.css" rel="stylesheet" type="text/css">
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.14.min.js"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.14.min.js"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.14.min.js"></script>
+{{ script|safe }}
+{% endblock %}
+
+{% block content %}
+
+
+{% for training in object.trainingmenus.all %}
+{{ training }}
+{% for time in training.get_times %}
+<p>{{ time }}</p>
+{% endfor %}
+
+{% endfor %}
+
+
+
+{{ div|safe }}
+
+<hr>
+<div>
+  {% for t in training.all %}
+  <p>{{ t.daymenu.date }}</p>
+{% if t.get_times %}
+  <p>{{ t.get_times }}</p>
+  {% endif %}
+  {% endfor %}
+  </div>
+
+{% endblock %}

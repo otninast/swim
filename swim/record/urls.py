@@ -4,12 +4,10 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 from . import views
 
-#from record.views import ChartView
+
 # app_name = 'record'
 
 urlpatterns = [
-    # url(r'^simple_chart/$', views.simple_chart, name='simple_chart'),
-    # url(r'^lineplot/$', views.line_plot, name='li'),
     url(r'^login', LoginView.as_view(template_name='record/login.html'), name='login'),
     url(r'^logout', LogoutView.as_view(template_name='record/logout.html'), name='logout'),
 
@@ -26,14 +24,11 @@ urlpatterns = [
     url(r'^player_list/$', views.Player_List, name='player_list'),
     url(r'^player/(?P<pk>[0-9]+)/$', views.Player_Info.as_view(), name='player_info'),
     url(r'^player_update/(?P<pk>[0-9]+)/$', views.Player_Update.as_view(), name='player_update'),
-    # url(r'^player_update/(?P<pk>[0-9]+)/$', views.Player_Update, name='player_update'),
 
-    # path(r'^player/<int:pk>/', views.Player_Info, name='player_info'),
 
-    # url(r'^opinion_box/$', views.OpinionBox, name='opinion_box'),
-    # url(r'^opinion_box_ajax/$', views.OpinionBoxAjax, name='opinion_box_ajax'),
-    # url(r'^opinion_box_result/$', views.OpinionBoxResult, name='opinion_box_result'),
+    url(r'^top/$', views.TopPage.as_view(), name='top'),
+    url(r'^top/(?P<pk>[0-9]+)/$', views.Training_Detail.as_view(), name='detail'),
 
-    # url(r'^test/$', views.Test, name='test'),
-
+    url(r'^test', views.test_view, name='test'),
+    url(r'^test2', views.test2_view, name='test2'),
 ]

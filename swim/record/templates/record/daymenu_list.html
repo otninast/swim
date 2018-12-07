@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<!-- <div class="card">
+  <div class="card-header">
+  </div>
+  <div class="card-body"> -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal3">
+  Launch demo modal
+</button>
+<div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModal3Label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModal3Label"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% include 'input.html' %}
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- </div>
+</div> -->
+
+
+<div class="container my-3">
+  <h2 class="my-3">練習記録一覧</h2>
+  <!-- <div class="row"> -->
+
+    {% for menu in request_users_daymenus %}
+    <!-- <div class="col-6"> -->
+      <div class="card mb-5">
+        <div class="card-header">
+          <a href="{% url 'detail' menu.pk %}"><h3>{{ menu.date }}</h3></a>
+        </div>
+        <div class="card-body">
+
+          {% for trainingmenu in menu.trainingmenus.all %}
+
+
+          <p>メインメニュー : {{ trainingmenu.menu_name}}</p>
+          <p>スタイル : {{ trainingmenu.style}}</p>
+          <p>距離 : {{ trainingmenu.distance}}メートル</p>
+
+
+          <table class="table table-striped table-sm">
+            <thead>
+              <tr>
+                <th>本数</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for time in trainingmenu.times.all %}
+              <tr>
+                <th>{{ time.pk }}</th>
+                <td>{{ time.time }}秒</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <!-- <img src={{img}} class='img-fluid'> -->
+          <hr>
+          {% endfor %}
+
+
+          <p class="font-weight-bold">Score: {{ menu.score }} point.<p>
+              <p>{{ menu.reflection }}</p>
+        </div>
+      </div>
+    <!-- </div> -->
+    {% endfor %}
+  <!-- </div> -->
+</div>
+
+{% endblock %}
+
+
+{% block script %}
+{% include 'input.js' %}
+{% endblock %}

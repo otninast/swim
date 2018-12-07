@@ -113,6 +113,8 @@ STATIC_URL = '/static/'
 # STATICFILES_DIRS = (
 #     os.path.normpath(os.path.join(BASE_DIR, 'assets')),
 # )
+# LOGIN_URL = 'record:login'
+# LOGIN_REDIRECT_URL = 'record:index'
 LOGIN_URL = '/record/login/'
 LOGIN_REDIRECT_URL = '/record/'
 # LOGIN_URL = '/login/'
